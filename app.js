@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
@@ -10,7 +11,6 @@ function App() {
   const [students, setStudents] = useState([]);
   const [editId, setEditId] = useState(null);
 
-  // handle input change
   const handleChange = (e)=>{
     setForm({...form, [e.target.name]: e.target.value});
   };
@@ -79,7 +79,7 @@ function App() {
     getStudents();
   };
 
-  // EDIT (fill form)
+  // EDIT
   const editStudent = (student)=>{
     setForm(student);
     setEditId(student._id);
@@ -90,25 +90,27 @@ function App() {
   },[]);
 
   return (
-    <div className="container">
-      <h2>Add / Update Student</h2>
+    <div className="container mt-3">
 
-      <input name="name" placeholder="Name" value={form.name} onChange={handleChange}/>
-      <input name="email" placeholder="Email" value={form.email} onChange={handleChange}/>
-      <input name="course" placeholder="Course" value={form.course} onChange={handleChange}/>
-      <input name="address" placeholder="Address" value={form.address} onChange={handleChange}/>
-      <input name="mobile" placeholder="Mobile" value={form.mobile} onChange={handleChange}/>
-      <input name="dob" type="date" value={form.dob} onChange={handleChange}/>
+      <h3>Add / Update Student</h3>
 
-      <br/><br/>
-      <button onClick={addStudent}>
+      {/* FORM */}
+      <input className="form-control mb-2" name="name" placeholder="Name" value={form.name} onChange={handleChange}/>
+      <input className="form-control mb-2" name="email" placeholder="Email" value={form.email} onChange={handleChange}/>
+      <input className="form-control mb-2" name="course" placeholder="Course" value={form.course} onChange={handleChange}/>
+      <input className="form-control mb-2" name="address" placeholder="Address" value={form.address} onChange={handleChange}/>
+      <input className="form-control mb-2" name="mobile" placeholder="Mobile" value={form.mobile} onChange={handleChange}/>
+      <input className="form-control mb-2" type="date" name="dob" value={form.dob} onChange={handleChange}/>
+
+      <button className="btn btn-primary mt-2" onClick={addStudent}>
         {editId ? "Update" : "Add"}
       </button>
 
-      <h2>Students</h2>
+      {/* TABLE */}
+      <h3 className="mt-4">Students</h3>
 
-      <table border="1">
-        <thead>
+      <table className="table table-bordered">
+        <thead className="table-dark">
           <tr>
             <th>Name</th>
             <th>Email</th>
@@ -126,13 +128,14 @@ function App() {
               <td>{s.course}</td>
               <td>{s.mobile}</td>
               <td>
-                <button onClick={()=>editStudent(s)}>Edit</button>
-                <button onClick={()=>deleteStudent(s._id)}>Delete</button>
+                <button className="btn btn-warning me-2" onClick={()=>editStudent(s)}>Edit</button>
+                <button className="btn btn-danger" onClick={()=>deleteStudent(s._id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
     </div>
   );
 }

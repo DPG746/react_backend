@@ -41,4 +41,20 @@ app.delete("/delete/:id",async(req,res)=>{
     res.send("Deleted");
 })
 
+// UPDATE
+app.put("/update/:id", async (req, res) => {
+    try {
+      const updatedStudent = await Student.findByIdAndUpdate(
+        req.params.id,     // which record
+        req.body,          // new data
+        { new: true }      // return updated data
+      );
+  
+      res.json(updatedStudent);
+    } catch (err) {
+      res.status(500).send("Error updating student");
+    }
+  });
+
+
 app.listen(3000,()=> console.log("Server running"));

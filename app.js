@@ -8,35 +8,32 @@ function App() {
   });
 
   const [students, setStudents] = useState([]);
+  const [editId, setEditId] = useState(null);
 
+  // handle input change
   const handleChange = (e)=>{
     setForm({...form, [e.target.name]: e.target.value});
   };
 
+  // ADD / UPDATE
   const addStudent = async ()=>{
 
-    console.log(form);-
-    console.log("Name:", form.name);
-    console.log("Length:", form.name.length);
-
-    // name validation
+    // VALIDATION
     if(!form.name || form.name.trim().length < 3){
       alert("Name must be at least 3 characters");
       return;
     }
 
-    //Email verification
     if(!form.email || !form.email.includes("@")){
       alert("Invalid email");
       return;
-
     }
 
     if(!form.course){
       alert("Course required");
       return;
     }
-    
+
     if(!form.address){
       alert("Address required");
       return;
@@ -52,19 +49,40 @@ function App() {
       return;
     }
 
+    // UPDATE
+    if(editId){
+      await axios.put(`http://localhost:3000/update/${editId}`, form);
+      setEditId(null);
+    }
+    // ADD
+    else{
+      await axios.post("http://localhost:3000/add", form);
+    }
 
-    await axios.post("http://localhost:3000/add", form);
     getStudents();
+
+    // clear form
+    setForm({
+      name:"", email:"", course:"", address:"", mobile:"", dob:""
+    });
   };
 
+  // GET
   const getStudents = async ()=>{
     const res = await axios.get("http://localhost:3000/all");
     setStudents(res.data);
   };
 
+  // DELETE
   const deleteStudent = async(id)=>{
     await axios.delete(`http://localhost:3000/delete/${id}`);
     getStudents();
+  };
+
+  // EDIT (fill form)
+  const editStudent = (student)=>{
+    setForm(student);
+    setEditId(student._id);
   };
 
   useEffect(()=>{
@@ -73,16 +91,19 @@ function App() {
 
   return (
     <div className="container">
-      <h2>Add Student</h2>
+      <h2>Add / Update Student</h2>
 
-      <input name="name" value={form.name} onChange={handleChange}/>
-      <input name="email" value={form.email} onChange={handleChange}/>
-      <input name="course" value={form.course} onChange={handleChange}/>
-      <input name="address" value={form.address} onChange={handleChange}/>
-      <input name="mobile" value={form.mobile} onChange={handleChange}/>
-      <input name="dob" value={form.dob} onChange={handleChange}/>
+      <input name="name" placeholder="Name" value={form.name} onChange={handleChange}/>
+      <input name="email" placeholder="Email" value={form.email} onChange={handleChange}/>
+      <input name="course" placeholder="Course" value={form.course} onChange={handleChange}/>
+      <input name="address" placeholder="Address" value={form.address} onChange={handleChange}/>
+      <input name="mobile" placeholder="Mobile" value={form.mobile} onChange={handleChange}/>
+      <input name="dob" type="date" value={form.dob} onChange={handleChange}/>
 
-      <button onClick={addStudent}>Add</button>
+      <br/><br/>
+      <button onClick={addStudent}>
+        {editId ? "Update" : "Add"}
+      </button>
 
       <h2>Students</h2>
 
@@ -91,6 +112,8 @@ function App() {
           <tr>
             <th>Name</th>
             <th>Email</th>
+            <th>Course</th>
+            <th>Mobile</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -100,7 +123,10 @@ function App() {
             <tr key={s._id}>
               <td>{s.name}</td>
               <td>{s.email}</td>
+              <td>{s.course}</td>
+              <td>{s.mobile}</td>
               <td>
+                <button onClick={()=>editStudent(s)}>Edit</button>
                 <button onClick={()=>deleteStudent(s._id)}>Delete</button>
               </td>
             </tr>

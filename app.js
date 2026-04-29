@@ -116,6 +116,8 @@ function App() {
             <th>Email</th>
             <th>Course</th>
             <th>Mobile</th>
+            <th>Address</th>
+            <th>DOB</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -127,6 +129,8 @@ function App() {
               <td>{s.email}</td>
               <td>{s.course}</td>
               <td>{s.mobile}</td>
+              <td>{s.address}</td>
+              <td>{s.DOB}</td>
               <td>
                 <button className="btn btn-warning me-2" onClick={()=>editStudent(s)}>Edit</button>
                 <button className="btn btn-danger" onClick={()=>deleteStudent(s._id)}>Delete</button>

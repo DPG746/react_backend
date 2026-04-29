@@ -130,7 +130,7 @@ function App() {
               <td>{s.course}</td>
               <td>{s.mobile}</td>
               <td>{s.address}</td>
-              <td>{s.DOB}</td>
+              <td>{s.dob}</td>
               <td>
                 <button className="btn btn-warning me-2" onClick={()=>editStudent(s)}>Edit</button>
                 <button className="btn btn-danger" onClick={()=>deleteStudent(s._id)}>Delete</button>
